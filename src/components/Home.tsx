@@ -1,9 +1,16 @@
-import React,{useState} from 'react'
+import React,{useState,createContext, useRef} from 'react'
 import Result from './Result.tsx';
+import Navbar from './Navbar.tsx';
 import './home.css'
 
+export const login = createContext(false)
+
 export default function Home() {
+    const varname = useRef(0);
+    varname.current = varname.current + 1;
+    
     const [location,setLocation] = useState("")
+    const [loginInfo,setLoginInfo] = useState(false)
     // console.log(location)
     const [result,setResult] = useState(false);
     const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=BV2NFAHT4AULQCEKNLEBF6RZG&contentType=json`
@@ -12,7 +19,7 @@ export default function Home() {
     const resetFunc = ()=>{
         setLocation("")
         setResult(false)
-
+        setLoginInfo(false)
     }
 
     const handleChange = (e)=>{
@@ -20,6 +27,7 @@ export default function Home() {
         let newLocation = e.target.value
         setLocation(newLocation)
         // console.log(location)
+        setLoginInfo(true)
     }
     const clickFunc = async ()=>{
         console.log("clicked")
@@ -42,6 +50,9 @@ export default function Home() {
 
   return (
     <>
+        <login.Provider value={loginInfo}>
+            <Navbar/>
+        </login.Provider>
         <div>
             <div className="search-box">
             <h1>Welcome to Weather App</h1>
